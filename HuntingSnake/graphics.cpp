@@ -1,6 +1,6 @@
 ﻿#include "graphics.h"
 
-void draw_rectangle(unsigned int x_pos, unsigned int y_pos, unsigned int height, unsigned int width, int line_color, int bg_color, std::string text, int txtColor)
+void draw_rectangle(unsigned int x_pos, unsigned int y_pos, unsigned int height, unsigned int width, int line_color, int bg_color, std::string text, int value, int txtColor)
 {
 	// if cannot draw => return
 	if (height < 1 || width < 1) return;
@@ -51,6 +51,8 @@ void draw_rectangle(unsigned int x_pos, unsigned int y_pos, unsigned int height,
 		text_color(bg_color, txtColor);
 		GotoXY(x_pos + (width - text.size()) / 2, y_pos + height / 2);
 		std::cout << text;
+
+		if (value != -1) cout << value;
 	}
 	text_color(0, 7); // set color to default
 
@@ -90,6 +92,6 @@ void highlightedBox(bool use, unsigned int x_pos, unsigned int y_pos, unsigned i
 
 	else {
 		// set back to normal state when navigate to other button
-		draw_rectangle(x_pos, y_pos, height, width, 5, bg_color, "", 0);
+		draw_rectangle(x_pos, y_pos, height, width, 5, bg_color, "", 0, 0);
 	}
 }

@@ -59,18 +59,18 @@ void LoadGame(int &lev)
 	switch (lev)
 	{
 	case 1:
-		draw_matchBoard(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, SCORE, LEVEL, 2, 0, "", 1);
+		draw_matchBoard(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, SCORE, lev, 2, 0, "", 1);
 		break;
 	case 2:
-		play_match2(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, obs, obs_nums, SCORE, LEVEL);
+		play_match2(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, obs, obs_nums, SCORE, lev);
 		break;
 	case 3:
-		play_match3(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, obs, obs_nums, SCORE, LEVEL);
+		play_match3(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, obs, obs_nums, SCORE, lev);
 		break;
 	case 4:
 		create_obstacle_4(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, obs, obs_nums, const_obs, const_obs_nums);
 		// draw match board
-		draw_matchBoard(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, SCORE, LEVEL, 2, 0, "", 1);
+		draw_matchBoard(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, SCORE, lev, 2, 0, "", 1);
 		break;
 	}
 	
@@ -522,7 +522,7 @@ void GenerateFood()
 void EatFood()
 {
 	SCORE += 50;
-	draw_matchBoard(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, SCORE, LEVEL, 2, 0, "", 1);
+	draw_matchBoard(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, SCORE, lev, 2, 0, "", 1);
 
 	Snake[Snake_Size] = Food[ID_Food]; // Insert new size of body (Insert food coordinates)
 

@@ -151,10 +151,10 @@ void mainMenu() {
     // set color for the background, color could be change in the macro in ConsoleWindow.h
     setBackgroundColor(BG_COLOR, TXT_COLOR);
     // draw menu
-    draw_rectangle(x_menu, y_menu, rec_height, rec_width, 5, BG_COLOR, "New Game", 6);
-    draw_rectangle(x_menu, y_menu + 5, rec_height, rec_width, 5, BG_COLOR, "Load Game", 6);
-    draw_rectangle(x_menu, y_menu + 10, rec_height, rec_width, 5, BG_COLOR, "Achievements", 6);
-    draw_rectangle(x_menu, y_menu + 15, rec_height, rec_width, 5, BG_COLOR, "Settings", 6);
+    draw_rectangle(x_menu, y_menu, rec_height, rec_width, 5, BG_COLOR, "New Game", -1, 6);
+    draw_rectangle(x_menu, y_menu + 5, rec_height, rec_width, 5, BG_COLOR, "Load Game", -1, 6);
+    draw_rectangle(x_menu, y_menu + 10, rec_height, rec_width, 5, BG_COLOR, "Achievements", -1, 6);
+    draw_rectangle(x_menu, y_menu + 15, rec_height, rec_width, 5, BG_COLOR, "Settings", -1, 6);
 
 
     // define variables use for navigate through the menu
@@ -217,7 +217,7 @@ void mainMenu() {
                     LoadGame(man);
                 }
                 else { // other options, will be further develope
-                    draw_rectangle(x_menu + rec_width + 1, y_pointer, rec_height, rec_width, 8, BG_COLOR, "Upcomming", 6);
+                    draw_rectangle(x_menu + rec_width + 1, y_pointer, rec_height, rec_width, 8, BG_COLOR, "Upcomming", -1, 6);
                 }
                 break;
             default:
