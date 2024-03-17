@@ -239,9 +239,18 @@ void ThreadFunction()
 				addTime = 0;
 				break;
 			}
-
+			
 			default:
 				break;
+			}
+		}
+
+		for (int i = 0; i < Snake_Size; i++)
+		{
+			if (TouchObs(Snake[i].x, Snake[i].y))
+			{
+				ProcessDead();
+				return;
 			}
 		}
 
@@ -333,6 +342,7 @@ void DrawGateU2(int x, int y, const string& st)
 	text_color(0, 4);
 	cout << st;
 }
+
 void DrawGateU3(int x, int y, const string& st)
 {
 	for (int i = -1; i <= 1; i++)
@@ -402,7 +412,7 @@ void ProcessGate(int &lev)
 			EraseGate();
 			GateDraw = false;
 
-			DeltaSpeed += 0.05F; // Increase speed when move to next level
+			DeltaSpeed += 0.025F; // Increase speed when move to next level
 			lev++; // Move to next level
 
 			if (lev == MAX_LEVEL)
@@ -447,8 +457,22 @@ bool isValidFood(int x, int y)
 			return false;
 
 	for (int i = 0; i < obs_nums; i++)
+	{
 		if (obs[i].x == x && obs[i].y == y)
 			return false;
+		if (abs(obs[i].x - x) <= 1 && abs(obs[i].y - y) <= 1)
+			return false;
+	}
+
+	for (int i = 0; i < const_obs_nums; i++)
+	{
+		if (const_obs[i].x == x && const_obs[i].y == y)
+			return false;
+
+		if (abs(const_obs[i].x - x) <= 1 && abs(const_obs[i].y - y) <= 1)
+			return false;
+	}
+
 	return true;
 }
 
@@ -466,9 +490,23 @@ void GenerateFood()
 			{
 				bool check = true;
 
-				for (int i = 0; i < obs_nums; i++)
-					if (abs(obs[i].x - x) <= 2 && abs(obs[i].y - y) <= 2)
+				for (int i = 0; i < const_obs_nums; i++)
+				{
+					if (abs(const_obs[i].x - x) <= 2 && abs(const_obs[i].y - y) <= 2)
+					{
 						check = false;
+						break;
+					}
+				}
+
+				for (int i = 0; i < obs_nums; i++)
+				{
+					if (abs(obs[i].x - x) <= 2 && abs(obs[i].y - y) <= 2)
+					{
+						check = false;
+						break;
+					}
+				}
 
 				if (GateDraw == true)
 					check = false;
@@ -550,6 +588,14 @@ bool CenterGate(int x, int y)
 		for (int i = 0; i < obs_nums; i++)
 			if (abs(obs[i].x - new_x) <= 1 && abs(obs[i].y - new_y) <= 1)
 				return false;
+
+		for (int i = 0; i < const_obs_nums; i++)
+			if (abs(const_obs[i].x - new_x) <= 1 && abs(const_obs[i].y - new_y) <= 1)
+				return false;
+
+		for (int i = 0; i < Snake_Size; i++)
+			if (abs(Snake[i].x - new_x) <= 4 && abs(Snake[i].y - new_y) <= 4)
+				return false;
 	}
 
 	return true;
@@ -571,6 +617,10 @@ bool TouchObs(int x, int y)
 {
 	for (int i = 0; i < obs_nums; i++)
 		if (x == obs[i].x && y == obs[i].y)
+			return true;
+
+	for (int i = 0; i < const_obs_nums; i++)
+		if (x == const_obs[i].x && y == const_obs[i].y)
 			return true;
 
 	return false;
