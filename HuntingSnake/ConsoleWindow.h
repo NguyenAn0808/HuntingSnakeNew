@@ -26,6 +26,8 @@ void DisableCtrButton(bool Close, bool Min, bool Max);
 void ShowScrollbar(BOOL Show);
 void SetConsolePosition(int x, int y);
 void LockConsolePosition();
+void SetWindowSize(SHORT width, SHORT height);
+void SetScreenBufferSize(SHORT width, SHORT height);
 void MaximizeConsoleWindow();
 void ShowConsoleCursor(bool show); // show/unshow the cursor of the terminal
 

@@ -39,19 +39,14 @@ void GotoXY(int x, int y)
 
 void LoadConsole()
 {
-    //set console 120x49
-    //setWindowSize(120, 49);
-    //setScreenBufferSize(120, 49);
+    SetWindowSize(120, 30);
+    SetScreenBufferSize(120, 30);
 
-    //set console maximize
     DisableResizeWindow();
     DisableCtrButton(1, 1, 1);
     ShowScrollbar(1);
     SetConsolePosition(1, 1);
     LockConsolePosition();
-
-    //Pause the program to watch result
-    //system("pause");
 }
 
 void DisableResizeWindow()
@@ -120,6 +115,30 @@ void MaximizeConsoleWindow()
     HWND consoleWindow = GetConsoleWindow();
     //set console at maximize size
     ShowWindow(consoleWindow, SW_MAXIMIZE);
+}
+
+void SetWindowSize(SHORT width, SHORT height)
+{
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    SMALL_RECT WindowSize;
+    WindowSize.Top = 0;
+    WindowSize.Left = 0;
+    WindowSize.Right = width;
+    WindowSize.Bottom = height;
+
+    SetConsoleWindowInfo(hStdout, 1, &WindowSize);
+}
+
+void SetScreenBufferSize(SHORT width, SHORT height)
+{
+    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    COORD NewSize;
+    NewSize.X = width;
+    NewSize.Y = height;
+
+    SetConsoleScreenBufferSize(hStdout, NewSize);
 }
 
 void ShowConsoleCursor(bool show)
