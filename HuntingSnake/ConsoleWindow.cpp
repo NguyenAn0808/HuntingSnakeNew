@@ -48,6 +48,12 @@ void LoadConsole()
     ShowScrollbar(0);
     SetConsolePosition(250, 250);
     LockConsolePosition();
+    // turn off cursor blinking
+    ShowConsoleCursor(false);
+
+    // set default color
+    setBackgroundColor(BG_RGB);
+    changeTextColor(TXT_RGB);
 }
 
 void DisableResizeWindow()
@@ -156,23 +162,13 @@ void ShowConsoleCursor(bool show)
 }
 
 void mainMenu() {
-    // Fix console
-    LoadConsole();
-    // turn off cursor blinking
-    ShowConsoleCursor(false);
-    // define position of the menu and size of each button
-    unsigned int x_menu = (getTermSize().x - 20) / 2 + 40,
+
+    int x_menu = (getTermSize().x - 20) / 2 + 40,
         y_menu = (getTermSize().y - 20) / 2,
         rec_width = 20,
         rec_height = 4;
 
-    /*DO NOT TOUCH*/
-    // set color for the background, color could be change in the macro in ConsoleWindow.h
-    COLORREF bgCol = rgb(255, 176, 176);
-    setBackgroundColor(BG_RGB);
-    changeTextColor(TXT_RGB);
     drawMenuSnake(0, 0, decorSnake);
-    //drawHSnake(x_menu - (42 / 2), y_menu);
 
     // draw menu
     draw_rectangle(x_menu, y_menu, rec_height, rec_width, TXT_RGB, "New Game", TXT_RGB);
@@ -180,12 +176,11 @@ void mainMenu() {
     draw_rectangle(x_menu, y_menu + 10, rec_height, rec_width, TXT_RGB, "Achievements", TXT_RGB);
     draw_rectangle(x_menu, y_menu + 15, rec_height, rec_width, TXT_RGB, "Settings", TXT_RGB);
 
-
     // define variables use for navigate through the menu
-    unsigned int x_pointer = x_menu, y_pointer = y_menu;
-    unsigned int x_prev = x_menu, y_prev = y_menu;
+    int x_pointer = x_menu, y_pointer = y_menu;
+    int x_prev = x_menu, y_prev = y_menu;
     bool check = true, isEnter = false;
-    int selection;
+    int selection = -1;
 
     while (isEnter == false) {
         GotoXY(x_pointer, y_pointer);
@@ -237,9 +232,6 @@ void mainMenu() {
             case 13: // if user pressed 'Enter'
                 selection = (y_pointer / y_menu);
                 isEnter  = true;
-                }
-            default:
-                break;
             }
         }
     }
@@ -250,7 +242,8 @@ void mainMenu() {
         LoadGame(man);
         break;
     default:
-        filled_rec(6, 6, 5, 5, { 0, 255, 255 }, "test", { 255, 0, 0 });
+        deleteArt(0, 0, decorSnake);
         break;
     }
+    GotoXY(0, 0);
 }
