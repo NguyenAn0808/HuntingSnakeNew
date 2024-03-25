@@ -19,10 +19,11 @@ const int MAX_SPEED = 5;
 const int MAX_SIZE_OBS = 10;
 const int MAX_LEVEL = 5;
 
-const int WIDTH_GAME = 81, HEIGH_GAME = 26;
-const int WIDTH_BOARD = 81, HEIGHT_BOARD = 23;
+const int WIDTH_BOARD = 81, HEIGHT_BOARD = 24;
 const int x_pos = 0;
-const int y_pos = 3;
+const int y_pos = 5;
+
+const int WIDTH_GAME = WIDTH_BOARD + x_pos, HEIGHT_GAME = HEIGHT_BOARD + y_pos;
 
 const string MSSV = "23127148231271522312744223127469";
 
@@ -50,10 +51,10 @@ void ThreadFunction(void);// Subfunction for thread
 void DrawSnake(const string& s);// Function Draw Snake
 void DrawFood(void);// Function Draw Food
 void DrawGate(int x, int y);// Function Draw Gate
-void DrawGateU1(int x, int y, const string& st); // Functio Draw Gate Type 1
-void DrawGateU2(int x, int y, const string& st); // Functio Draw Gate Type 2
-void DrawGateU3(int x, int y, const string& st); // Functio Draw Gate Type 3
-void DrawGateU4(int x, int y, const string& st); // Functio Draw Gate Type 4
+void DrawGateU1(int x, int y); // Functio Draw Gate Type 1
+void DrawGateU2(int x, int y); // Functio Draw Gate Type 2
+void DrawGateU3(int x, int y); // Functio Draw Gate Type 3
+void DrawGateU4(int x, int y); // Functio Draw Gate Type 4
 
 void ProcessGate(int &lev); // Function Process Gate
 void EraseGate(); //Function Erase Gate

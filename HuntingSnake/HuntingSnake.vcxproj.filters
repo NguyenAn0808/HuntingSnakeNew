@@ -33,6 +33,9 @@
     <ClCompile Include="GameMatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="arts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GenerateMap.h">
@@ -48,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameMatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

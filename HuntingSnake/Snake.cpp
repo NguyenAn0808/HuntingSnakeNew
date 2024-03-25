@@ -2,9 +2,16 @@
 #include "ConsoleWindow.h"
 #include "GameMatch.h"
 #include "GenerateMap.h"
+#include "graphics.h"
+#include "arts.h"
 
 // Random number generator (rng) generates seed to random number [0, 2^64 - 1]
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+
+CONSOLE_SCREEN_BUFFER_INFO csbi;
+//HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+HANDLE hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+CHAR_INFO ci;
 
 // Declare Global Variables, Structs
 Point Snake[MAX_SIZE_SNAKE]; // Snake
@@ -106,7 +113,9 @@ void LoadGame(int &lev)
 }
 void PauseGame(HANDLE t)
 {
+	//pause_game();
 	SuspendThread(t);
+	//pause_game();
 }
 void ExitGame(HANDLE t)
 {
@@ -114,43 +123,18 @@ void ExitGame(HANDLE t)
 	TerminateThread(t, 0);
 }
 
-/*
-void LoadMap()
-{
-
-	// PLAY TEST
-	//play_match2(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, obs, obs_nums, SCORE, LEVEL);
-	//play_match3(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, obs, obs_nums, SCORE, LEVEL);
-	//play_match4(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, obs, obs_nums, up, const_obs, const_obs_nums, SCORE, LEVEL);
-
-
-	create_obstacle_4(x_pos, y_pos, WIDTH_BOARD, HEIGHT_BOARD, obs, obs_nums, const_obs, const_obs_nums);
-	// draw match board
-	draw_matchBoard(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, SCORE, LEVEL, 2, 0, "", 1);
-	// Move obstacle
-	while (true) {
-		move_obs(x_pos, y_pos, WIDTH_BOARD, HEIGHT_BOARD, obs, obs_nums, up, const_obs, const_obs_nums);
-		// Set movable obstacle speed
-		Sleep(65);
-	}
-
-}
-*/
-
 void ProcessDead()
 {
 	STATE = 0; // DEAD
-	GotoXY(35, 1);
-	cout << "GAME OVER\n";
-	GotoXY(35, 2);
+	//draw_snakeDEAD(0, 5, snakeDEAD);
+	draw_snakeDEAD(0, 5, snakeDEAD);
 	system("pause");
 }
 
 void ProcessWin()
 {
 	GotoXY(35, 1);
-	cout << "YOU WIN\n";
-	GotoXY(35, 2);
+	draw_snakeWIN(0, 5, snakeWIN);
 	system("pause");
 }
 
@@ -190,14 +174,15 @@ void ResetData()
 
 void ThreadFunction()
 {
-
+	//drawMAP2(0, 5, MAP2);
 	int leve = getValue(lev);
 	while (true)
 	{
+		//drawMAP2(0, 5, MAP2);
 		switch (leve)
 		{
-		case 4:
-			move_obs(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, obs, obs_nums, up, const_obs, const_obs_nums);
+			case 4:
+				move_obs(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, obs, obs_nums, up, const_obs, const_obs_nums);
 		}
 
 		if (STATE == 1) // If snake ALIVE -> continue
@@ -210,33 +195,41 @@ void ThreadFunction()
 				// Addtime set speed different between columns and rows
 			case 'W': case 'H':
 			{
+				draw_ButtonW();
 				MoveUp();
 				CHAR_LOCK = (MOVING == 'W' ? 'S' : 'P');
 				addTime = 0.35F;
+				//drawMAP2(0, 5, MAP2);
 				break;
 			}
 
 			case 'S': case 'P':
 			{
+				draw_ButtonS();
 				MoveDown();
 				CHAR_LOCK = (MOVING == 'S' ? 'W' : 'H');
 				addTime = 0.35F;
+				//drawMAP2(0, 5, MAP2);
 				break;
 			}
 
 			case 'A': case 'K':
 			{
+				draw_ButtonA();
 				MoveLeft();
 				CHAR_LOCK = (MOVING == 'A' ? 'D' : 'M');
 				addTime = 0;
+				//drawMAP2(0, 5, MAP2);
 				break;
 			}
 
 			case 'D': case 'M':
 			{
+				draw_ButtonD();
 				MoveRight();
 				CHAR_LOCK = (MOVING == 'D' ? 'A' : 'K');
 				addTime = 0;
+				//drawMAP2(0, 5, MAP2);
 				break;
 			}
 			
@@ -253,7 +246,6 @@ void ThreadFunction()
 				return;
 			}
 		}
-
 		DrawSnake(MSSV); // After one move, draw new snake because of the change of coordinates
 		ProcessGate(lev); // Process if meet the conditions to create the gate
 		Sleep(100 / (SPEED + DeltaSpeed - addTime)); // Sleep function will set the speed of snake
@@ -276,112 +268,144 @@ void DrawSnake(const string& str) // With str is MSSV
 }
 void DrawFood()
 {
+	SetConsoleOutputCP(CP_UTF8);
+
 	GotoXY(Food[ID_Food].x, Food[ID_Food].y);
-	text_color(0, 10);
-	cout << "O";
+
+
+	//CONSOLE_SCREEN_BUFFER_INFO csbi;
+	//WORD backgroundColor = csbi.wAttributes & 0x00F0;
+
+	//COORD spotCoords = { 65, 13 };
+
+	COORD spotCoords = { Food[ID_Food].x,  Food[ID_Food].y };
+
+	GetConsoleScreenBufferInfo(hConsoleOutput, &csbi);
+
+	DWORD spotPos = Food[ID_Food].x + csbi.dwSize.X * Food[ID_Food].y;
+
+
+	// Array to store attributes
+	WORD attribute;
+
+	// Read the attribute at the specified spot
+	ReadConsoleOutputAttribute(hConsoleOutput, &attribute, 1, {spotCoords.X, spotCoords.Y}, &spotPos);
+
+	// Extract foreground and background colors from the attribute
+	WORD foregroundColor = attribute & 0x0F;
+	WORD backgroundColor = (attribute & 0xF0) >> 4;
+
+	text_color(foregroundColor, colorCode::DARK_RED);
+
+	cout << u8"\u263B";
 }
 void DrawGate(int x, int y)
 {
+	SetConsoleOutputCP(CP_UTF8);
 	TYPE = Random(1, 4); // Random 4 types of gates
 
 	switch (TYPE)
 	{
 	case 1:
-		DrawGateU1(x, y, "o");
+		DrawGateU1(x, y);
 		break;
 	case 2:
-		DrawGateU2(x, y, "o");
+		DrawGateU2(x, y);
 		break;
 	case 3:
-		DrawGateU3(x, y, "o");
+		DrawGateU3(x, y);
 		break;
 	case 4:
-		DrawGateU4(x, y, "o");
+		DrawGateU4(x, y);
 		break;
 	}
 
 	GateDraw = true; // Gate exits
 }
-void DrawGateU1(int x, int y, const string& st)
+void DrawGateU1(int x, int y)
 {
+	SetConsoleOutputCP(CP_UTF8);
 	for (int i = -1; i <= 1; i++)
 	{
 		GotoXY(x + i, y);
 		Gate[cntGate++] = { x + i, y }; // Save coordinates of each point from gate to array
 		text_color(0, 4);
-		cout << st;
+		cout << u8"\u0489";
 	}
 
 	GotoXY(x - 1, y - 1);
 	Gate[cntGate++] = { x - 1, y - 1 };
 	text_color(0, 4);
-	cout << st;
+	cout << u8"\u0489";
 
 	GotoXY(x + 1, y - 1);
 	Gate[cntGate++] = { x + 1, y - 1 };
 	text_color(0, 4);
-	cout << st;
+	cout << u8"\u0489";
 }
-void DrawGateU2(int x, int y, const string& st)
+void DrawGateU2(int x, int y)
 {
+	SetConsoleOutputCP(CP_UTF8);
 	for (int i = -1; i <= 1; i++)
 	{
 		GotoXY(x + i, y);
 		Gate[cntGate++] = { x + i, y };
 		text_color(0, 4);
-		cout << st;
+		cout << u8"\u0489";
 	}
 
 	GotoXY(x - 1, y + 1);
 	Gate[cntGate++] = { x - 1, y + 1 };
 	text_color(0, 4);
-	cout << st;
+	cout << u8"\u0489";
 
 	GotoXY(x + 1, y + 1);
 	Gate[cntGate++] = { x + 1, y + 1 };
 	text_color(0, 4);
-	cout << st;
+	cout << u8"\u0489";
 }
 
-void DrawGateU3(int x, int y, const string& st)
+void DrawGateU3(int x, int y)
 {
+	SetConsoleOutputCP(CP_UTF8);
 	for (int i = -1; i <= 1; i++)
 	{
 		GotoXY(x, y + i);
 		Gate[cntGate++] = { x, y + i };
 		text_color(0, 4);
-		cout << st;
+		cout << u8"\u0489";
 	}
 
 	GotoXY(x + 1, y - 1);
 	Gate[cntGate++] = { x + 1, y - 1 };
 	text_color(0, 4);
-	cout << st;
+	cout << u8"\u0489";
 
 	GotoXY(x + 1, y + 1);
 	Gate[cntGate++] = { x + 1, y + 1 };
 	text_color(0, 4);
-	cout << st;
+	cout << u8"\u0489";
 }
-void DrawGateU4(int x, int y, const string& st)
+void DrawGateU4(int x, int y)
 {
+	SetConsoleOutputCP(CP_UTF8);
 	for (int i = -1; i <= 1; i++)
 	{
 		GotoXY(x, y + i);
 		Gate[cntGate++] = { x, y + i };
 		text_color(0, 4);
-		cout << st;
+		cout << u8"\u0489";
 	}
 
 	GotoXY(x - 1, y - 1);
 	Gate[cntGate++] = { x - 1, y - 1 };
 	text_color(0, 4);
-	cout << st;
+	cout << u8"\u0489";
 
 	GotoXY(x - 1, y + 1);
 	Gate[cntGate++] = { x - 1, y + 1 };
 	text_color(0, 4);
-	cout << st;
+	cout << u8"\u0489";
 }
 
 void ProcessGate(int &lev)
@@ -484,7 +508,7 @@ void GenerateFood()
 		while (true)
 		{
 			x = Random(10, WIDTH_GAME - 10);
-			y = Random(10, HEIGH_GAME - 10);
+			y = Random(10, HEIGHT_GAME - 10);
 
 			if (isValidFood(x, y) == true)
 			{
@@ -522,7 +546,7 @@ void GenerateFood()
 void EatFood()
 {
 	SCORE += 50;
-	draw_matchBoard(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, SCORE, lev, 2, 0, "", 1);
+	//draw_matchBoard(x_pos, y_pos, HEIGHT_BOARD, WIDTH_BOARD, SCORE, lev, 2, 0, "", 1);
 
 	Snake[Snake_Size] = Food[ID_Food]; // Insert new size of body (Insert food coordinates)
 
@@ -545,7 +569,7 @@ void GenerateCenterGate()
 	do
 	{
 		x = Random(8, WIDTH_GAME - 8);
-		y = Random(8, HEIGH_GAME - 8);
+		y = Random(8, HEIGHT_GAME - 8);
 	} while (CenterGate(x - 2, y) == false || CenterGate(x, y) == false || CenterGate(x + 2, y) == false
 		|| CenterGate(x - 2, y - 2) == false || CenterGate(x, y - 2) == false || CenterGate(x + 2, y - 2) == false
 		|| CenterGate(x - 2, y + 2) == false || CenterGate(x, y + 2) == false || CenterGate(x + 2, y + 2) == false);
@@ -603,7 +627,7 @@ bool CenterGate(int x, int y)
 
 bool TouchWall(int x, int y)
 {
-	return !(x > 1 && x < WIDTH_GAME && y > 3 && y < HEIGH_GAME);
+	return !(x > x_pos  && x < WIDTH_GAME  && y > y_pos  && y < HEIGHT_GAME );
 }
 bool TouchItself()
 {
