@@ -5,9 +5,6 @@
 #include "Snake.h"
 #include "graphics.h"
 // macro for console background color & text color
-#define BG_COLOR 1
-#define TXT_COLOR 7
-
 
 #define BG_COLOR colorCode::LIGHT_CYAN
 #define TXT_COLOR colorCode::LIGHT_YELLOW
