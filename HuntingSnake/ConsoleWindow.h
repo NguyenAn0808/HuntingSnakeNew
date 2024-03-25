@@ -8,6 +8,15 @@
 #define BG_COLOR 1
 #define TXT_COLOR 7
 
+
+#define BG_COLOR colorCode::LIGHT_CYAN
+#define TXT_COLOR colorCode::LIGHT_YELLOW
+#define BG_RGB rgb(163, 244, 255)
+#define TXT_RGB {12, 45, 87}
+const long nScreenWidth = ::GetSystemMetrics(SM_CXSCREEN);
+const long nScreenHeight = ::GetSystemMetrics(SM_CYSCREEN);
+
+
 struct axis //store terminal's axis
 {
 	int x;

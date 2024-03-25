@@ -1,6 +1,7 @@
 #include "ConsoleWindow.h"
 #include "GenerateMap.h"
 #include "snake.h"
+#include "arts.h"
 
 
 int man = 1;
@@ -43,9 +44,9 @@ void LoadConsole()
     SetScreenBufferSize(120, 30);
 
     DisableResizeWindow();
-    DisableCtrButton(1, 1, 1);
-    ShowScrollbar(1);
-    SetConsolePosition(1, 1);
+    DisableCtrButton(0, 0, 0);
+    ShowScrollbar(0);
+    SetConsolePosition(250, 250);
     LockConsolePosition();
 }
 
@@ -155,31 +156,38 @@ void ShowConsoleCursor(bool show)
 }
 
 void mainMenu() {
+    // Fix console
     LoadConsole();
     // turn off cursor blinking
     ShowConsoleCursor(false);
-
     // define position of the menu and size of each button
-    unsigned int x_menu = (getTermSize().x - 20) / 2,
-        y_menu = 5,
+    unsigned int x_menu = (getTermSize().x - 20) / 2 + 40,
+        y_menu = (getTermSize().y - 20) / 2,
         rec_width = 20,
         rec_height = 4;
 
+    /*DO NOT TOUCH*/
     // set color for the background, color could be change in the macro in ConsoleWindow.h
-    setBackgroundColor(BG_COLOR, TXT_COLOR);
+    COLORREF bgCol = rgb(255, 176, 176);
+    setBackgroundColor(BG_RGB);
+    changeTextColor(TXT_RGB);
+    drawMenuSnake(0, 0, decorSnake);
+    //drawHSnake(x_menu - (42 / 2), y_menu);
+
     // draw menu
-    draw_rectangle(x_menu, y_menu, rec_height, rec_width, 5, BG_COLOR, "New Game", -1, 6);
-    draw_rectangle(x_menu, y_menu + 5, rec_height, rec_width, 5, BG_COLOR, "Load Game", -1, 6);
-    draw_rectangle(x_menu, y_menu + 10, rec_height, rec_width, 5, BG_COLOR, "Achievements", -1, 6);
-    draw_rectangle(x_menu, y_menu + 15, rec_height, rec_width, 5, BG_COLOR, "Settings", -1, 6);
+    draw_rectangle(x_menu, y_menu, rec_height, rec_width, TXT_RGB, "New Game", TXT_RGB);
+    draw_rectangle(x_menu, y_menu + 5, rec_height, rec_width, TXT_RGB, "Load Game", TXT_RGB);
+    draw_rectangle(x_menu, y_menu + 10, rec_height, rec_width, TXT_RGB, "Achievements", TXT_RGB);
+    draw_rectangle(x_menu, y_menu + 15, rec_height, rec_width, TXT_RGB, "Settings", TXT_RGB);
 
 
     // define variables use for navigate through the menu
     unsigned int x_pointer = x_menu, y_pointer = y_menu;
     unsigned int x_prev = x_menu, y_prev = y_menu;
-    bool check = true;
+    bool check = true, isEnter = false;
+    int selection;
 
-    while (true) {
+    while (isEnter == false) {
         GotoXY(x_pointer, y_pointer);
 
         // highlitght the current option that the user choose, only if any key is pressed
@@ -187,14 +195,14 @@ void mainMenu() {
             //if the user navigate to the next button, the x_prev and y_prev variables will store the previous axis
             // then turn off the hightlight of the box by set the first paraameter of highlightedBox() to false
             GotoXY(x_prev, y_prev);
-            highlightedBox(false, x_prev, y_prev, rec_height, rec_width, BG_COLOR, 5);
+            draw_rectangle(x_prev, y_prev, rec_height, rec_width, TXT_RGB);
 
             // change the x_prev & y_prev to the current position
             x_prev = x_pointer;
             y_prev = y_pointer;
 
             // hightlight the current button
-            highlightedBox(true, x_pointer, y_pointer, rec_height, rec_width, BG_COLOR, 5);
+            highlightedBox(x_pointer, y_pointer, rec_height, rec_width, { 225, 0, 0 });
 
             // set to false to mark that now there's no button pressed
             check = false;
@@ -215,30 +223,34 @@ void mainMenu() {
                 // move pointer down to the next button
                 y_pointer += 5;
                 // if pointer is out of range => set the pointer to the first position
-                if (y_pointer > y_menu * 4) y_pointer = y_menu;
+                if (y_pointer > y_menu + 15) y_pointer = y_menu;
                 GotoXY(x_pointer, y_pointer);
                 break;
             case 'W': case 'H': // if user pressed W or 'Arrow Up'
                 // move pointer up to the next button
                 y_pointer -= 5;
                 // if pointer is out of range => set the pointer to the last button
-                if (y_pointer < y_menu) y_pointer = y_menu * 4;
+                if (y_pointer < y_menu) y_pointer = y_menu + 15;
                 GotoXY(x_pointer, y_pointer);
 
                 break;
             case 13: // if user pressed 'Enter'
-                if (y_pointer / y_menu == 1) { // if user press button 1 (Start Game)
-                    StartGame();
-                    //LoadMap();
-                    LoadGame(man);
+                selection = (y_pointer / y_menu);
+                isEnter  = true;
                 }
-                else { // other options, will be further develope
-                    draw_rectangle(x_menu + rec_width + 1, y_pointer, rec_height, rec_width, 8, BG_COLOR, "Upcomming", -1, 6);
-                }
-                break;
             default:
                 break;
             }
         }
+    }
+    switch (selection)
+    {
+    case 1:
+        StartGame();
+        LoadGame(man);
+        break;
+    default:
+        filled_rec(6, 6, 5, 5, { 0, 255, 255 }, "test", { 255, 0, 0 });
+        break;
     }
 }

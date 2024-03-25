@@ -1,5 +1,7 @@
 ﻿#include "GameMatch.h"
 #include "snake.h"
+#include "graphics.h"
+#include "arts.h"
 
 // change text inside color
 void setTextColor(int color)
@@ -8,54 +10,91 @@ void setTextColor(int color)
 }
 
 
-/*
-	void draw_matchBoard(unsigned int x_pos, unsigned int y_pos, unsigned int height, unsigned int width, int &SCORE, int &LEVEL) {
-	GotoXY(x_pos + 20, y_pos - 2);
-	draw_rec(x_pos, y_pos, height, width);
-	draw_infoBoard(width + 5, y_pos, height - 4, width - 48, 2, 0, 5);
-	draw_underline(x_pos, height + 4, 2, width - 50, "MAP: ", 1, 2, 0, 5);
-	draw_underline(width - 50 + 2, height + 4, 2, width - (width - 50) - 1, "PLAYER: ", 1, 2, 0, 5);
-	draw_underline(width + 5, height, 3, width - 50 + 2, "SCORE: ", SCORE, 2, 0, 5);
-	draw_underline(width + 5, height + 4, 2, width - 50 + 2, "LEVEL: ", LEVEL, 2, 0, 5);
-}
-*/
-
-
 //	draw_matchBoard
 void draw_matchBoard(unsigned int x_pos, unsigned int y_pos, unsigned int height, unsigned int width, int& SCORE, int& LEVEL, int line_color, int bg_color, std::string text, int txtColor) {
 
-	draw_rectangle(x_pos, y_pos, height, width, line_color, bg_color, text, -1, txtColor);
+	draw_huntingSnake();
 
-	draw_infoBoard(width + 5, y_pos, height - 4, width - 48, 2, 0, 5, "");
+	drawMAP1(x_pos, y_pos, MAP1);
 
-	draw_rectangle(x_pos, height + 4, 2, width - 50, line_color, bg_color, "MAP: ", 1, txtColor);
-	draw_rectangle(width - 50 + 2, height + 4, 2, width - (width - 50) - 2, line_color, bg_color, "PLAYER: ", 1, txtColor);
-	draw_rectangle(width + 5, height, 3, width - 50 + 2, line_color, bg_color, "SCORE: ", SCORE, txtColor);
-	draw_rectangle(width + 5, height + 4, 2, width - 50 + 2, line_color, bg_color, "LEVEL: ", LEVEL, txtColor);
+	//drawInfor(width + 5, y_pos, inforBoard);
+	draw_INFOR(width + 5, y_pos, infor_Board);
+
+
+	switch (LEVEL)
+	{
+		case 1:
+			draw_level1();
+			break;
+		case 2:
+			draw_level2();
+			break;
+		case 3:
+			draw_level3();
+			break;
+		case 4:
+			draw_level4();
+			break;
+	}
+	
+
 }
 
 // draw infor board
 void draw_infoBoard(unsigned int x_pos, unsigned int y_pos, unsigned int height, unsigned int width, int txtColor, int bg_color, int line_color, std::string text) {
+ 	SetConsoleOutputCP(CP_UTF8);
 
-
-	draw_rectangle(x_pos, y_pos, height, width, line_color, bg_color, text, -1, txtColor);
-	setTextColor(2);
+	changeTextColor({ 255, 0, 0 }, {255, 255, 0});
 	GotoXY(x_pos + 6, y_pos + 3); cout << "TUTORIAL";
+	changeTextColor();
 
-	draw_rectangle(x_pos + 8, y_pos + 5, 2, 4, line_color, bg_color, "W", -1, txtColor);
-	draw_rectangle(x_pos + 2, y_pos + 8, 2, 4, line_color, bg_color, "A", -1, txtColor);
-	draw_rectangle(x_pos + 8, y_pos + 8, 2, 4, line_color, bg_color, "S", -1, txtColor);
-	draw_rectangle(x_pos + 14, y_pos + 8, 2, 4, line_color, bg_color, "D", -1, txtColor);
+	/*
+	filled_rec(x_pos + 8, y_pos + 5, 1, 3, { 0, 255, 0 });
+	GotoXY(x_pos + 9, y_pos + 6);
+	changeTextColor({ 0, 0, 0 }, { 0, 255, 0 });
+	cout << "W" << u8"\u2191";
+	//GotoXY(x_pos + 8 + 3, y_pos + 5);
+	changeTextColor();
 
-	GotoXY(x_pos + 3, y_pos + 13); cout << "PAUSE:         PRESS U";
-	GotoXY(x_pos + 3, y_pos + 15); cout << "EXIT:          PRESS ESC";
+	filled_rec(x_pos + 2, y_pos + 8, 1, 3, { 0, 255, 0 });
+	//text_color(colorCode::LIGHT_BLUE, colorCode::BLACK);
+	GotoXY(x_pos + 3, y_pos + 9);
+	changeTextColor({ 0, 0, 0 }, { 0, 255, 0 });
+	cout << "A" << u8"\u2190";
+	changeTextColor();
+
+	filled_rec(x_pos + 8, y_pos + 8, 1, 3, { 0, 255, 0 });
+	//text_color(colorCode::LIGHT_BLUE, colorCode::BLACK);
+	GotoXY(x_pos + 9, y_pos + 9);
+	changeTextColor({ 0, 0, 0 }, { 0, 255, 0 });
+	cout << "S" << u8"\u2193";
+	changeTextColor();
+
+	filled_rec(x_pos + 14, y_pos + 8, 1, 3, { 0, 255, 0 });
+	//text_color(colorCode::LIGHT_BLUE, colorCode::BLACK);
+	GotoXY(x_pos + 15, y_pos + 9);
+	changeTextColor({ 0, 0, 0 }, { 0, 255, 0 });
+	cout << "D" << u8"\u2192";
+	changeTextColor();
+	*/
+	
+	//text_color(colorCode::DARK_YELLOW, colorCode::BLACK);
+	GotoXY(x_pos + 3, y_pos + 11); cout << "PAUSE:  PRESS U";
+	GotoXY(x_pos + 3, y_pos + 12); cout << "EXIT:   PRESS ESC";
+
+	GotoXY(x_pos+1, y_pos + 14);
+	for (int i = 1; i <= width-1; i++) {
+		cout << u8"\u2550";
+	}
+	text_color(colorCode::DARK_YELLOW, colorCode::BLACK);
+	GotoXY(x_pos + 12, y_pos + 15); cout << "SCORE";
 }
 
 // draw obstacle from create_obs
 void draw_obstacle(Point obs[], int obs_nums) {
 	for (int i = 0; i < obs_nums; i++) {
 		GotoXY(obs[i].x, obs[i].y);
-		cout << char(219);
+		cout << u8"\u2588";
 	}
 }
 

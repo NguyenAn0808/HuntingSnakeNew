@@ -1,5 +1,6 @@
 #include "GenerateMap.h"
 #include "Snake.h"
+#include "arts.h";
 
 
 // ___________________________________________________________________MAP 2______________________________________________________________________
@@ -19,13 +20,14 @@ void create_obstacle_2(unsigned int x_pos, unsigned int y_pos, unsigned int heig
 
 		// Thanh vat can phia duoi
 		obs[obs_nums].x = i;
-		obs[obs_nums].y = height - 4;
+		obs[obs_nums].y = height - 1;
 		obs_nums++;
 	}
 }
 
 // Generate level 2
 void play_match2(unsigned int x_pos, unsigned int y_pos, unsigned int height, unsigned int width, Point obs[], int& obs_nums, int& SCORE, int& LEVEL) {
+	//drawMAP2(0, 0, MAP2);
 	// prepare obstacle for level 2
 	create_obstacle_2(x_pos, y_pos, height, width, obs, obs_nums);
 	// draw match board
@@ -42,16 +44,16 @@ void create_obstacle_3(unsigned int x_pos, unsigned int y_pos, unsigned int heig
 	int dist = 10;
 	for (int i = x_pos + dist; i <= width - dist; i++) {
 		obs[obs_nums].x = i;
-		obs[obs_nums].y = y_pos + 5;
+		obs[obs_nums].y = y_pos + 6;
 		obs_nums++;
 
 		obs[obs_nums].x = i;
-		obs[obs_nums].y = height - 2;
+		obs[obs_nums].y = height - 1;
 		obs_nums++;
 	}
 
 	// Them hai thanh vat can nam dung ben trai va ben phai
-	for (int j = y_pos + 8; j <= height - 5; j++) {
+	for (int j = y_pos + 10; j <= height - 5; j++) {
 
 		// Vi vat can nam dung nen thay doi gia tri y va giu nguyen gia tri x cua tung toa do {x,y}
 
@@ -102,9 +104,9 @@ void create_obstacle_4(int x_pos, int y_pos, int height, int width, Point obs[],
 		obs_nums++;
 	}
 	// Khoi tao gia tri toa do thanh vat can nam ngang co dinh
-	for (int i = x_pos + width / 2 - 4; i <= x_pos + width / 2 + 4; i++) {
+	for (int i = x_pos + width/2 - 10; i <= x_pos + width / 2 + 10; i++) {
 		const_obs[const_obs_nums].x = i;
-		const_obs[const_obs_nums].y = 13;
+		const_obs[const_obs_nums].y = 16;
 		const_obs_nums++;
 	}
 
@@ -123,7 +125,7 @@ void move_obs(int x_pos, int y_pos, int height, int width, Point obs[], int obs_
 			obs[i].y--;
 		}
 		GotoXY(obs[0].x, obs[0].y);
-		cout << char(219);
+		cout << u8"\u2588"; // char(219)
 
 		GotoXY(obs[obs_nums / 2].x, obs[obs_nums / 2].y);
 		cout << " ";
@@ -132,7 +134,7 @@ void move_obs(int x_pos, int y_pos, int height, int width, Point obs[], int obs_
 			obs[i].y++;
 		}
 		GotoXY(obs[obs_nums - 1].x, obs[obs_nums - 1].y);
-		cout << char(219);
+		cout << u8"\u2588";
 
 		if (obs[0].y == y_pos + 1)
 		{
@@ -151,7 +153,7 @@ void move_obs(int x_pos, int y_pos, int height, int width, Point obs[], int obs_
 		}
 
 		GotoXY(obs[obs_nums / 2 - 1].x, obs[obs_nums / 2 - 1].y);
-		cout << char(219);
+		cout << u8"\u2588";
 
 		GotoXY(obs[obs_nums - 1].x, obs[obs_nums - 1].y);
 		cout << " ";
@@ -160,7 +162,7 @@ void move_obs(int x_pos, int y_pos, int height, int width, Point obs[], int obs_
 			obs[i].y--;
 		}
 		GotoXY(obs[obs_nums / 2].x, obs[obs_nums / 2].y);
-		cout << char(219);
+		cout << u8"\u2588";
 
 
 		if (obs[obs_nums / 2 - 1].y == y_pos + height - 1)
