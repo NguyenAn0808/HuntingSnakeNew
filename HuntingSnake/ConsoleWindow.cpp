@@ -232,6 +232,8 @@ void mainMenu() {
             case 13: // if user pressed 'Enter'
                 selection = (y_pointer / y_menu);
                 isEnter  = true;
+                }
+            default:
                 break;
             }
         }
