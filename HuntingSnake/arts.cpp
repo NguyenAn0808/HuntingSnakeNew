@@ -3,7 +3,6 @@
 #include <iostream>
 #include "graphics.h"
 
-
 void drawMenuSnake(int pos_x, int pos_y, std::string pic)
 {
     GotoXY(pos_x, pos_y);
@@ -25,7 +24,6 @@ void drawMenuSnake(int pos_x, int pos_y, std::string pic)
     }
     changeTextColor();
 }
-
 
 void drawMAP1(int pos_x, int pos_y, std::string pic)
 {
@@ -74,7 +72,6 @@ void drawMAP1(int pos_x, int pos_y, std::string pic)
     }
 }
 
-
 void drawMAP2(int pos_x, int pos_y, std::string pic)
 {
     SetConsoleOutputCP(CP_UTF8);
@@ -104,7 +101,6 @@ void drawMAP2(int pos_x, int pos_y, std::string pic)
     }
 
 }
-
 
 void drawMAP3(int pos_x, int pos_y, std::string pic)
 {
@@ -159,9 +155,6 @@ void drawMAP3(int pos_x, int pos_y, std::string pic)
     }
 }
 
-
-
-
 void drawMAP4(int pos_x, int pos_y, std::string pic)
 {
     SetConsoleOutputCP(CP_UTF8);
@@ -207,9 +200,6 @@ void drawMAP4(int pos_x, int pos_y, std::string pic)
 
     //draw_huntingSnake();
 }
-
-
-
 
 void draw_INFOR(int pos_x, int pos_y, std::string pic)
 {
@@ -269,11 +259,6 @@ void draw_INFOR(int pos_x, int pos_y, std::string pic)
         cout << u8"\u2588";
     }
 }
-
-
-
-
-
 
 void draw_snakeWIN(int pos_x, int pos_y, std::string pic)
 {
@@ -338,10 +323,6 @@ void draw_snakeWIN(int pos_x, int pos_y, std::string pic)
 
 }
 
-
-
-
-
 void draw_snakeDEAD(int pos_x, int pos_y, std::string pic)
 {
     SetConsoleOutputCP(CP_UTF8);
@@ -402,4 +383,14 @@ void draw_snakeDEAD(int pos_x, int pos_y, std::string pic)
     GotoXY(2, 17); std::cout << u8"██║  ██║██╔══╝  ██╔══██║██║  ██║\n";
     GotoXY(2, 18); std::cout << u8"██████╔╝███████╗██║  ██║██████╔╝\n";
     GotoXY(2, 19); std::cout << u8" ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═════╝\n";
+}
+
+void deleteArt(int pos_x, int pos_y, std::string pic) {
+    GotoXY(pos_x, pos_y);
+    for (const char i : pic) {
+        if (i > 32) cout << " ";
+        else {
+            cout << i;
+        }
+    }
 }

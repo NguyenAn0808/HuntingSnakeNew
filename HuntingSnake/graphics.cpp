@@ -265,9 +265,3 @@ void pause_game() {
 	//system("cls");
 	//draw_matchBoard(10, 20, 10, 20, scor, le, 2, 0, "", 1);
 }
-
-
-
-
-
-
