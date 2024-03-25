@@ -184,10 +184,10 @@ void mainMenu() {
     // define variables use for navigate through the menu
     unsigned int x_pointer = x_menu, y_pointer = y_menu;
     unsigned int x_prev = x_menu, y_prev = y_menu;
-    bool check = true, isEnter = true;
+    bool check = true, isEnter = false;
     int selection;
 
-    while (isEnter) {
+    while (isEnter == false) {
         GotoXY(x_pointer, y_pointer);
 
         // highlitght the current option that the user choose, only if any key is pressed
@@ -236,7 +236,7 @@ void mainMenu() {
                 break;
             case 13: // if user pressed 'Enter'
                 selection = (y_pointer / y_menu);
-                isEnter  = false;
+                isEnter  = true;
                 break;
             }
         }
